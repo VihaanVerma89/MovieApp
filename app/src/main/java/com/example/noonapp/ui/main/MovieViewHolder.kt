@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.noonapp.R
 import com.example.noonapp.databinding.ItemMovieBinding
 import com.example.noonapp.models.Search
@@ -34,6 +35,7 @@ class MovieViewHolder(val binding: ItemMovieBinding) : RecyclerView.ViewHolder(b
 
         Glide.with(binding.root.context)
             .load(search.poster)
+            .transition(DrawableTransitionOptions.withCrossFade())
             .into(binding.movieIv)
     }
 

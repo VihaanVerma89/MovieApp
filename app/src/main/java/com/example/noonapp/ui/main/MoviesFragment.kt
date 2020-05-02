@@ -121,10 +121,13 @@ class MoviesFragment : Fragment() {
             }
             .subscribe({
                 Log.d(TAG, "initSearchView onNext: $it")
+                viewModel.getMovies(it)
             }, {
                 Log.d(TAG, "initSearchView onError: $it")
             }, {
                 Log.d(TAG, "initSearchView onComplete")
+                viewModel.getMovies("batman")
+                initSearchView(searchView)
             })
     }
 

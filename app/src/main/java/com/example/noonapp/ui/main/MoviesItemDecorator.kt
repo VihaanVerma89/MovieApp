@@ -42,8 +42,6 @@ class MoviesItemDecorator(val context: Context) : RecyclerView.ItemDecoration() 
         item: Any,
         position: Int
     ) {
-
-
         outRect.top = UiUtils.dpToPx(10)
         outRect.left= UiUtils.dpToPx(10)
         outRect.right= UiUtils.dpToPx(10)
