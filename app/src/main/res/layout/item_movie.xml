@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/movie_name_tv"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/aspectRatioImageView"
+            tools:text="Movie Name whiasodfja slkdfj laksdjf la" />
+
+
+        <TextView
+            android:id="@+id/movie_year_tv"
+            style="@style/TextAppearance.MaterialComponents.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="@+id/movie_name_tv"
+            app:layout_constraintTop_toBottomOf="@+id/movie_name_tv"
+            tools:text="2006" />
+
+        <com.google.android.material.chip.Chip
+            style="@style/Widget.MaterialComponents.Chip.Action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Movie"
+            app:layout_constraintStart_toStartOf="@+id/movie_year_tv"
+            app:layout_constraintTop_toBottomOf="@+id/movie_year_tv" />
+
+        <com.example.noonapp.ui.widgets.AspectRatioImageView
+            android:id="@+id/aspectRatioImageView"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            app:aspectRatio="1"
+            app:aspectRatioEnabled="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <!--        tools:src="@drawable/bat"-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

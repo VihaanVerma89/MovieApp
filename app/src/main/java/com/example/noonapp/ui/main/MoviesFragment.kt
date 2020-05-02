@@ -1,15 +1,20 @@
 package com.example.noonapp.ui.main
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.noonapp.R
+import com.example.noonapp.models.MoviesResponse
+import com.example.noonapp.models.Search
 import com.example.noonapp.network.RequestResult
 import com.example.noonapp.ui.utils.RxSearchObservable
+import kotlinx.android.synthetic.main.movies_fragment.*
 import java.util.concurrent.TimeUnit
 
 class MoviesFragment : Fragment() {
@@ -44,9 +49,10 @@ class MoviesFragment : Fragment() {
     }
 
     private fun init() {
+        initRV()
         initViewModel()
         initViewModelObservers()
-        getMoviesResponse("shawshank redemption")
+        getMoviesResponse("batman")
     }
 
     private fun initViewModel() {
@@ -76,12 +82,32 @@ class MoviesFragment : Fragment() {
 
     private fun onGetMoviesResponseSuccess(requestResult: RequestResult.Success<Any>) {
 
-        Log.d(TAG, "onGetMoviesResponseSuccess: $requestResult")
+        val data = requestResult.data
+        if (data is MoviesResponse) {
+            submitList(data.search)
+        }
     }
 
     private fun onGetMoviesResponseError(requestResult: RequestResult.Error<Any>) {
 
         Log.d(TAG, "onGetMoviesResponseError: $requestResult")
+    }
+
+    private lateinit var adapter: MoviesAdapter
+    private lateinit var itemDecorator: MoviesItemDecorator
+    private fun initRV() {
+        adapter = MoviesAdapter(
+            requireContext()
+        )
+        itemDecorator = MoviesItemDecorator(requireContext())
+        movies_rv.adapter = adapter
+        movies_rv.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        movies_rv.addItemDecoration(itemDecorator)
+    }
+
+
+    fun submitList(searchList: List<Search>) {
+        adapter.submitList(searchList)
     }
 
     fun initSearchView(searchView: SearchView) {
