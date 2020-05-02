@@ -32,6 +32,7 @@ class MovieViewHolder(val binding: ItemMovieBinding) : RecyclerView.ViewHolder(b
 
         binding.movieNameTv.text = search.title
         binding.movieYearTv.text = search.year
+        binding.typeNameTv.text = search.type
 
         Glide.with(binding.root.context)
             .load(search.poster)
