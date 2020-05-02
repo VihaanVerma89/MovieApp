@@ -6,7 +6,9 @@ import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.example.noonapp.R
+import com.example.noonapp.network.RequestResult
 import com.example.noonapp.ui.utils.RxSearchObservable
 import java.util.concurrent.TimeUnit
 
@@ -42,6 +44,44 @@ class MoviesFragment : Fragment() {
     }
 
     private fun init() {
+        initViewModel()
+        initViewModelObservers()
+        getMoviesResponse("shawshank redemption")
+    }
+
+    private fun initViewModel() {
+        viewModel = ViewModelProvider(this).get(MoviesViewModel::class.java)
+    }
+
+    private fun initViewModelObservers() {
+        with(viewModel)
+        {
+            getMoviesMld.observe(viewLifecycleOwner, Observer {
+                onGetMoviesResponse(it)
+            })
+        }
+    }
+
+    private fun onGetMoviesResponse(requestResult: RequestResult<Any>) {
+        when (requestResult) {
+            is RequestResult.Loading -> onGetMoviesResponseLoading(requestResult)
+            is RequestResult.Error -> onGetMoviesResponseError(requestResult)
+            is RequestResult.Success -> onGetMoviesResponseSuccess(requestResult)
+        }
+    }
+
+    private fun onGetMoviesResponseLoading(requestResult: RequestResult.Loading<Any>) {
+        Log.d(TAG, "onGetMoviesResponseLoading: $requestResult")
+    }
+
+    private fun onGetMoviesResponseSuccess(requestResult: RequestResult.Success<Any>) {
+
+        Log.d(TAG, "onGetMoviesResponseSuccess: $requestResult")
+    }
+
+    private fun onGetMoviesResponseError(requestResult: RequestResult.Error<Any>) {
+
+        Log.d(TAG, "onGetMoviesResponseError: $requestResult")
     }
 
     fun initSearchView(searchView: SearchView) {
@@ -62,10 +102,12 @@ class MoviesFragment : Fragment() {
             })
     }
 
+    private fun getMoviesResponse(searchTerm: String) {
+        viewModel.getMovies(searchTerm)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MoviesViewModel::class.java)
-        // TODO: Use the ViewModel
     }
 
 }

@@ -2,7 +2,13 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+
 }
+
+def apikeyPropertiesFile = rootProject.file("apikey.properties")
+def apikeyProperties = new Properties()
+apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
 
 android {
     compileSdkVersion 29
@@ -16,6 +22,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "CONSUMER_KEY", apikeyProperties['CONSUMER_KEY'])
     }
 
     buildTypes {
@@ -48,9 +55,15 @@ dependencies {
 
 
     implementation("com.squareup.moshi:moshi:1.9.2")
-    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
-    implementation "com.squareup.retrofit2:converter-moshi:2.8.1"
+    kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.9.2'
 
+
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-moshi:$rootProject.retrofitVersion"
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
 
 
     implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxjavaVersion"
