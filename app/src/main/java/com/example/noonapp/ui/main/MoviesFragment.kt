@@ -52,7 +52,7 @@ class MoviesFragment : Fragment() {
         initRV()
         initViewModel()
         initViewModelObservers()
-        getMoviesResponse("batman")
+        getMoviesResponse("marvel")
     }
 
     private fun initViewModel() {

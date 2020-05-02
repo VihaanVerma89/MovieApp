@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.example.noonapp.ui.utils.UiUtils
 
 class MoviesItemDecorator(val context: Context) : RecyclerView.ItemDecoration() {
 
@@ -42,8 +43,10 @@ class MoviesItemDecorator(val context: Context) : RecyclerView.ItemDecoration() 
         position: Int
     ) {
 
-        when (item) {
-        }
+
+        outRect.top = UiUtils.dpToPx(10)
+        outRect.left= UiUtils.dpToPx(10)
+        outRect.right= UiUtils.dpToPx(10)
         view.tag = item
     }
 }

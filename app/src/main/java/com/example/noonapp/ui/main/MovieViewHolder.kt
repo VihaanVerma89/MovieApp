@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.noonapp.R
 import com.example.noonapp.databinding.ItemMovieBinding
 import com.example.noonapp.models.Search
@@ -31,6 +32,9 @@ class MovieViewHolder(val binding: ItemMovieBinding) : RecyclerView.ViewHolder(b
         binding.movieNameTv.text = search.title
         binding.movieYearTv.text = search.year
 
+        Glide.with(binding.root.context)
+            .load(search.poster)
+            .into(binding.movieIv)
     }
 
 
