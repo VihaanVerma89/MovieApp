@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.noonapp.R
 import com.example.noonapp.models.MoviesResponse
-import com.example.noonapp.models.Search
+import com.example.noonapp.models.Movie
 import com.example.noonapp.network.RequestResult
 import com.example.noonapp.ui.utils.RxSearchObservable
 import kotlinx.android.synthetic.main.movies_fragment.*
@@ -84,7 +84,7 @@ class MoviesFragment : Fragment() {
 
         val data = requestResult.data
         if (data is MoviesResponse) {
-            submitList(data.search)
+            submitList(data.movies)
         }
     }
 
@@ -106,8 +106,8 @@ class MoviesFragment : Fragment() {
     }
 
 
-    fun submitList(searchList: List<Search>) {
-        adapter.submitList(searchList)
+    fun submitList(movieList: List<Movie>) {
+        adapter.submitList(movieList)
     }
 
     fun initSearchView(searchView: SearchView) {

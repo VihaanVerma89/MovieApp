@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.noonapp.R
 import com.example.noonapp.databinding.ItemMovieBinding
-import com.example.noonapp.models.Search
+import com.example.noonapp.models.Movie
 
 class MovieViewHolder(val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -28,14 +28,14 @@ class MovieViewHolder(val binding: ItemMovieBinding) : RecyclerView.ViewHolder(b
         }
     }
 
-    fun bind(search: Search) {
+    fun bind(movie: Movie) {
 
-        binding.movieNameTv.text = search.title
-        binding.movieYearTv.text = search.year
-        binding.typeNameTv.text = search.type
+        binding.movieNameTv.text = movie.title
+        binding.movieYearTv.text = movie.year
+        binding.typeNameTv.text = movie.type
 
         Glide.with(binding.root.context)
-            .load(search.poster)
+            .load(movie.poster)
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(binding.movieIv)
     }

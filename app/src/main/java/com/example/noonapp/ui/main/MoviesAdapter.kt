@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.noonapp.models.Search
+import com.example.noonapp.models.Movie
 
 class MoviesAdapter(val context: Context) :
     ListAdapter<Any, RecyclerView.ViewHolder>(ExamDiffCallback(context)) {
@@ -21,7 +21,7 @@ class MoviesAdapter(val context: Context) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
         when (holder) {
-            is MovieViewHolder -> holder.bind(item as Search)
+            is MovieViewHolder -> holder.bind(item as Movie)
         }
     }
 
@@ -31,7 +31,7 @@ class MoviesAdapter(val context: Context) :
         val item = getItem(position)
 
         when (item) {
-            is Search -> itemViewType = MovieViewHolder.layout
+            is Movie -> itemViewType = MovieViewHolder.layout
         }
         return itemViewType
     }

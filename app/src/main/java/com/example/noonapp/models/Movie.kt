@@ -1,14 +1,19 @@
 package com.example.noonapp.models
 
 
+import androidx.annotation.Keep
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import com.example.noonapp.database.Tables
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import androidx.annotation.Keep
 
 @Keep
 @JsonClass(generateAdapter = true)
-data class Search(
+@Entity(tableName = Tables.Movies)
+data class Movie(
     @Json(name = "imdbID")
+    @PrimaryKey
     val imdbID: String,
     @Json(name = "Poster")
     val poster: String,
