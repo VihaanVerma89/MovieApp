@@ -8,6 +8,8 @@ buildscript {
         retrofitVersion = '2.8.1'
         glideVersion = "4.11.0"
         roomVersion = "2.2.5"
+        lifecycleVersion = '2.2.0'
+        fragmentVersion = '1.1.0'
     }
 
     repositories {

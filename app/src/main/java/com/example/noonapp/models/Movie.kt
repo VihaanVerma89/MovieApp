@@ -4,7 +4,7 @@ package com.example.noonapp.models
 import androidx.annotation.Keep
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.noonapp.database.Tables
+import com.example.noonapp.data.database.Tables
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -12,8 +12,9 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 @Entity(tableName = Tables.Movies)
 data class Movie(
-    @Json(name = "imdbID")
+
     @PrimaryKey
+    @Json(name = "imdbID")
     val imdbID: String,
     @Json(name = "Poster")
     val poster: String,
@@ -24,3 +25,5 @@ data class Movie(
     @Json(name = "Year")
     val year: String
 )
+{
+}

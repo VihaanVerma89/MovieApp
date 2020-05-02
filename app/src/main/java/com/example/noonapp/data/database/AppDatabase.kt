@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package com.example.noonapp.database
+package com.example.noonapp.data.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.noonapp.data.database.daos.MoviesDao
 import com.example.noonapp.models.Movie
 
 /**
  * The Room database for this app
  */
 @Database(entities = [Movie::class], version = 1, exportSchema = false)
-//@TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
-//    abstract fun gardenPlantingDao(): GardenPlantingDao
-//    abstract fun plantDao(): PlantDao
+    abstract fun moviesDao(): MoviesDao
 
     companion object {
         const val DATABASE_NAME = "app-db"

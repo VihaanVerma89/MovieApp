@@ -5,14 +5,14 @@ import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.noonapp.R
-import com.example.noonapp.models.MoviesResponse
+import com.example.noonapp.data.network.RequestResult
+import com.example.noonapp.di.InjectorUtils
 import com.example.noonapp.models.Movie
-import com.example.noonapp.network.RequestResult
 import com.example.noonapp.ui.utils.RxSearchObservable
 import kotlinx.android.synthetic.main.movies_fragment.*
 import java.util.concurrent.TimeUnit
@@ -24,7 +24,10 @@ class MoviesFragment : Fragment() {
         fun newInstance() = MoviesFragment()
     }
 
-    private lateinit var viewModel: MoviesViewModel
+    private val viewModel: MoviesViewModel by viewModels {
+        InjectorUtils.provideMoviesViewModelFactory(requireContext())
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,14 +53,10 @@ class MoviesFragment : Fragment() {
 
     private fun init() {
         initRV()
-        initViewModel()
         initViewModelObservers()
-        getMoviesResponse("marvel")
+        getMoviesResponse("Matrix")
     }
 
-    private fun initViewModel() {
-        viewModel = ViewModelProvider(this).get(MoviesViewModel::class.java)
-    }
 
     private fun initViewModelObservers() {
         with(viewModel)
@@ -83,8 +82,9 @@ class MoviesFragment : Fragment() {
     private fun onGetMoviesResponseSuccess(requestResult: RequestResult.Success<Any>) {
 
         val data = requestResult.data
-        if (data is MoviesResponse) {
-            submitList(data.movies)
+//        if (data is MoviesResponse) {
+        if (data is List<*>) {
+            submitList(data as List<Movie>)
         }
     }
 

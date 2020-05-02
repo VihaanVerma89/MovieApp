@@ -1,4 +1,4 @@
-package com.example.noonapp.database
+package com.example.noonapp.data.database
 
 class Tables{
 
