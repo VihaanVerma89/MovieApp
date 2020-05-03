@@ -3,6 +3,7 @@ package com.example.noonapp.data.database
 class Tables{
 
     companion object{
-        const val Movies = "movies"
+        const val MOVIES = "movies"
+        const val SEARCH_TERMS= "search_terms"
     }
 }

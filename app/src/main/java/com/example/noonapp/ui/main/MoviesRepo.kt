@@ -4,7 +4,7 @@ import android.util.Log
 import com.example.noonapp.data.database.MoviesLocalDataSource
 import com.example.noonapp.data.interfaces.MoviesDataSource
 import com.example.noonapp.data.network.MoviesRemoteDataSource
-import com.example.noonapp.models.Movie
+import com.example.noonapp.models.SearchedMovie
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -27,7 +27,8 @@ class MoviesRepo(
             .subscribeOn(Schedulers.io())
             .delay(10, TimeUnit.SECONDS)
             .map {
-                moviesLocalDataSource.insertMovies(it)
+                insertMovies(it)
+//                moviesLocalDataSource.insertMovies(searchTerm,it)
                 it
             }
             .observeOn(AndroidSchedulers.mainThread())
@@ -43,20 +44,25 @@ class MoviesRepo(
 
     }
 
-    override fun getMovies(searchTerm: String): Flowable<List<Movie>> {
+    override fun getMovies(searchTerm: String): Flowable<SearchedMovie> {
         getAndSaveMoviesFromRemoteDataSource(searchTerm)
         return getMoviesFromLocalDataSource(searchTerm)
     }
 
-    override fun insertMovies(movieList: List<Movie>) {
-
+    override fun insertMovies(searchedMovie: SearchedMovie) {
+        moviesLocalDataSource.insertMovies(searchedMovie)
     }
 
-    private fun getMoviesFromLocalDataSource(searchTerm: String): Flowable<List<Movie>> {
+//    override fun insertMovies(searchTerm: String, movieList: List<Movie>) {
+//
+//    }
+
+
+    private fun getMoviesFromLocalDataSource(searchTerm: String): Flowable<SearchedMovie> {
         return moviesLocalDataSource.getMovies(searchTerm)
     }
 
-    private fun getMoviesFromRemoteDataSource(searchTerm: String): Flowable<List<Movie>> {
+    private fun getMoviesFromRemoteDataSource(searchTerm: String): Flowable<SearchedMovie> {
         return moviesRemoteDataSource.getMovies(searchTerm)
     }
 

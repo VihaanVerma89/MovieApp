@@ -1,9 +1,9 @@
 package com.example.noonapp.data.interfaces
 
-import com.example.noonapp.models.Movie
+import com.example.noonapp.models.SearchedMovie
 import io.reactivex.Flowable
 
 interface MoviesDataSource {
-    fun getMovies(searchTerm: String): Flowable<List<Movie>>
-    fun insertMovies(movieList: List<Movie>)
+    fun getMovies(searchTerm: String): Flowable<SearchedMovie>?
+    fun insertMovies(searchedMovie: SearchedMovie)
 }

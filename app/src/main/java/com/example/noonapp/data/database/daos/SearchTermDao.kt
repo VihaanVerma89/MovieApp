@@ -16,26 +16,23 @@
 
 package com.example.noonapp.data.database.daos
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import com.example.noonapp.models.Movie
+import androidx.room.*
+import com.example.noonapp.data.database.Tables
+import com.example.noonapp.models.SearchTerm
+import com.example.noonapp.models.SearchedMovie
+import io.reactivex.Flowable
 
 /**
  * The Data Access Object for the Plant class.
  */
 @Dao
-interface MoviesDao {
-//    @Query("SELECT * FROM ${Tables.MOVIES}")
-//    fun getMovies(searchTerm: String): Flowable<List<Movie>>
-
-
-//    @Transaction
-//    @Query("SELECT * FROM ${Tables.SEARCH_TERMS}")
-//    fun getSearchedMovies(searchTerm: String): Flowable<List<SearchedMovie>>
-
-
+interface SearchTermDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMovies(movies: List<Movie>): List<Long>
+    fun insert(searchTerm: SearchTerm): Long
+
+    @Transaction
+    @Query("SELECT * FROM ${Tables.SEARCH_TERMS} where searchTerm = :searchTerm")
+    fun getSearchedMovie(searchTerm: String): Flowable<SearchedMovie>
+
 
 }

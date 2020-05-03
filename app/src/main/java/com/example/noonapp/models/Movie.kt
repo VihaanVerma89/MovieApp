@@ -10,9 +10,10 @@ import com.squareup.moshi.JsonClass
 
 @Keep
 @JsonClass(generateAdapter = true)
-@Entity(tableName = Tables.Movies)
+@Entity(tableName = Tables.MOVIES)
 data class Movie(
-
+//    @Transient
+    var searchTermId: Long=-1,
     @PrimaryKey
     @Json(name = "imdbID")
     val imdbID: String,
@@ -25,5 +26,3 @@ data class Movie(
     @Json(name = "Year")
     val year: String
 )
-{
-}

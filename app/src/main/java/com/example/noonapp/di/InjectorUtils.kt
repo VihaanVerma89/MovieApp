@@ -38,7 +38,8 @@ object InjectorUtils {
     private fun getMoviesRepository(context: Context): MoviesRepo {
         val appDatabase = AppDatabase.getInstance(context)
         val moviesDao = appDatabase.moviesDao()
-        val moviesLocalDataSource = MoviesLocalDataSource(moviesDao)
+        val searchTermDao= appDatabase.searchTermDao()
+        val moviesLocalDataSource = MoviesLocalDataSource(moviesDao, searchTermDao)
         val movieService = getMovieService()
         val moviesRemoteDataSource = MoviesRemoteDataSource(movieService)
         return MoviesRepo(moviesLocalDataSource, moviesRemoteDataSource)

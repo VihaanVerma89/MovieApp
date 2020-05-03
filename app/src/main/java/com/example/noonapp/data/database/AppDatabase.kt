@@ -22,14 +22,17 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.noonapp.data.database.daos.MoviesDao
+import com.example.noonapp.data.database.daos.SearchTermDao
 import com.example.noonapp.models.Movie
+import com.example.noonapp.models.SearchTerm
 
 /**
  * The Room database for this app
  */
-@Database(entities = [Movie::class], version = 1, exportSchema = false)
+@Database(entities = [Movie::class, SearchTerm::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun moviesDao(): MoviesDao
+    abstract fun searchTermDao(): SearchTermDao
 
     companion object {
         const val DATABASE_NAME = "app-db"
