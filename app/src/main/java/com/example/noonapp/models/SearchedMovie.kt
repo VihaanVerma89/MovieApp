@@ -7,8 +7,8 @@ data class SearchedMovie(
 
     @Embedded val searchTerm: SearchTerm,
     @Relation(
-        parentColumn = "searchTermId",
-        entityColumn = "searchTermId"
+        parentColumn = "searchTerm",
+        entityColumn = "searchTerm"
     )
     val movies: List<Movie>
 )

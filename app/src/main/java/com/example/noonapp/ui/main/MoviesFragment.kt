@@ -13,6 +13,7 @@ import com.example.noonapp.R
 import com.example.noonapp.data.network.RequestResult
 import com.example.noonapp.di.InjectorUtils
 import com.example.noonapp.models.Movie
+import com.example.noonapp.models.SearchedMovie
 import com.example.noonapp.ui.utils.RxSearchObservable
 import kotlinx.android.synthetic.main.movies_fragment.*
 import java.util.concurrent.TimeUnit
@@ -80,11 +81,10 @@ class MoviesFragment : Fragment() {
     }
 
     private fun onGetMoviesResponseSuccess(requestResult: RequestResult.Success<Any>) {
-
         val data = requestResult.data
-//        if (data is MoviesResponse) {
-        if (data is List<*>) {
-            submitList(data as List<Movie>)
+        if (data is SearchedMovie) {
+            val movies = data.movies
+            submitList(movies)
         }
     }
 

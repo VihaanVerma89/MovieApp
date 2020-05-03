@@ -27,7 +27,8 @@ class MoviesLocalDataSource(
         val insert = searchTermDao.insert(searchTerm)
         val movies = searchedMovie.movies
         movies.forEach {
-            it.searchTermId = insert
+//            it.searchTermId = insert
+            it.searchTerm= searchTerm.searchTerm
         }
         val insertMovies = moviesDao.insertMovies(movies)
         Log.d(TAG, "insertMovies: $insertMovies")

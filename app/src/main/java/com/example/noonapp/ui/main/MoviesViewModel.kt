@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.noonapp.data.network.RequestResult
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 class MoviesViewModel(val repo: MoviesRepo) : ViewModel() {
@@ -14,8 +15,11 @@ class MoviesViewModel(val repo: MoviesRepo) : ViewModel() {
     }
 
     val getMoviesMld = MutableLiveData<RequestResult<Any>>()
+
+    private val compositeDisposable = CompositeDisposable()
     fun getMovies(searchTerm: String) {
-        repo.getMovies(searchTerm)
+        compositeDisposable.clear()
+        val subscribe = repo.getMovies(searchTerm)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
@@ -27,6 +31,7 @@ class MoviesViewModel(val repo: MoviesRepo) : ViewModel() {
             }, {
                 Log.d(TAG, "getMovies: onComplete")
             })
+        compositeDisposable.add(subscribe)
     }
 
 }

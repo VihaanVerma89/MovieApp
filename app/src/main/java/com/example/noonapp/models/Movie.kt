@@ -13,7 +13,9 @@ import com.squareup.moshi.JsonClass
 @Entity(tableName = Tables.MOVIES)
 data class Movie(
 //    @Transient
-    var searchTermId: Long=-1,
+//    var searchTermId: Long=-1,
+//    @Transient
+    var searchTerm: String="",
     @PrimaryKey
     @Json(name = "imdbID")
     val imdbID: String,
