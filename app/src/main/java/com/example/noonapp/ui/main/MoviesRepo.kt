@@ -25,7 +25,7 @@ class MoviesRepo(
     private fun getAndSaveMoviesFromRemoteDataSource(searchTerm: String) {
         getMoviesFromRemoteDataSource(searchTerm)
             .subscribeOn(Schedulers.io())
-            .delay(10, TimeUnit.SECONDS)
+            .delay(5, TimeUnit.SECONDS)
             .map {
                 insertMovies(it)
 //                moviesLocalDataSource.insertMovies(searchTerm,it)
@@ -36,7 +36,7 @@ class MoviesRepo(
                 {
                     Log.d(TAG, "getAndSaveMoviesFromRemoteDataSource: onNext $it")
                 }, {
-                    Log.d(TAG, "getAndSaveMoviesFromRemoteDataSource: onError $it")
+                   Log.d(TAG, "getAndSaveMoviesFromRemoteDataSource: onError $it")
                 }, {
                     Log.d(TAG, "getAndSaveMoviesFromRemoteDataSource: onComplete")
                 }
