@@ -69,7 +69,7 @@ class MoviesFragment : Fragment() {
     }
 
     private fun onGetMoviesResponse(requestResult: RequestResult<Any>) {
-        when (requestResult) {
+       when (requestResult) {
             is RequestResult.Loading -> onGetMoviesResponseLoading(requestResult)
             is RequestResult.Error -> onGetMoviesResponseError(requestResult)
             is RequestResult.Success -> onGetMoviesResponseSuccess(requestResult)

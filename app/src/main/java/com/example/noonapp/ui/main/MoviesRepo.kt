@@ -1,19 +1,23 @@
 package com.example.noonapp.ui.main
 
 import android.util.Log
+import com.example.noonapp.data.NetworkThrowable
 import com.example.noonapp.data.database.MoviesLocalDataSource
-import com.example.noonapp.data.interfaces.MoviesDataSource
 import com.example.noonapp.data.network.MoviesRemoteDataSource
 import com.example.noonapp.models.SearchedMovie
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.FlowableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class MoviesRepo(
     val moviesLocalDataSource: MoviesLocalDataSource,
     val moviesRemoteDataSource: MoviesRemoteDataSource
-) : MoviesDataSource {
+//) : MoviesDataSource {
+) {
 
     companion object {
         val TAG = MoviesRepo::class.java.name
@@ -22,13 +26,17 @@ class MoviesRepo(
 //    fun getMoviesResponse(searchTerm: String): Flowable<> {
 //    }
 
-    private fun getAndSaveMoviesFromRemoteDataSource(searchTerm: String) {
-        getMoviesFromRemoteDataSource(searchTerm)
+    private val compositeDisposable = CompositeDisposable()
+
+    private fun getAndSaveMoviesFromRemoteDataSource(
+        emitter: FlowableEmitter<Any>,
+        searchTerm: String
+    ) {
+        val subscribe = getMoviesFromRemoteDataSource(searchTerm)
             .subscribeOn(Schedulers.io())
-            .delay(5, TimeUnit.SECONDS)
+            .delay(3, TimeUnit.SECONDS)
             .map {
                 insertMovies(it)
-//                moviesLocalDataSource.insertMovies(searchTerm,it)
                 it
             }
             .observeOn(AndroidSchedulers.mainThread())
@@ -36,20 +44,30 @@ class MoviesRepo(
                 {
                     Log.d(TAG, "getAndSaveMoviesFromRemoteDataSource: onNext $it")
                 }, {
-                   Log.d(TAG, "getAndSaveMoviesFromRemoteDataSource: onError $it")
+                    val moviesException = NetworkThrowable(it, searchTerm)
+                    if (!emitter.isCancelled) {
+                        emitter.onNext(moviesException)
+                    }
+                    Log.d(TAG, "getAndSaveMoviesFromRemoteDataSource: onError $it")
                 }, {
                     Log.d(TAG, "getAndSaveMoviesFromRemoteDataSource: onComplete")
                 }
             )
+        compositeDisposable.add(subscribe)
+    }
+
+    fun getMovies(searchTerm: String): Flowable<Any> {
+        return Flowable.create({ emitter ->
+            compositeDisposable.clear()
+            getAndSaveMoviesFromRemoteDataSource(emitter, searchTerm)
+            getMoviesFromLocalDataSource(emitter, searchTerm)
+
+        }, BackpressureStrategy.BUFFER)
 
     }
 
-    override fun getMovies(searchTerm: String): Flowable<SearchedMovie> {
-        getAndSaveMoviesFromRemoteDataSource(searchTerm)
-        return getMoviesFromLocalDataSource(searchTerm)
-    }
-
-    override fun insertMovies(searchedMovie: SearchedMovie) {
+    //    override fun insertMovies(searchedMovie: SearchedMovie) {
+    fun insertMovies(searchedMovie: SearchedMovie) {
         moviesLocalDataSource.insertMovies(searchedMovie)
     }
 
@@ -58,8 +76,31 @@ class MoviesRepo(
 //    }
 
 
-    private fun getMoviesFromLocalDataSource(searchTerm: String): Flowable<SearchedMovie> {
-        return moviesLocalDataSource.getMovies(searchTerm)
+    private fun getMoviesFromLocalDataSource(
+        emitter: FlowableEmitter<Any>,
+        searchTerm: String
+//    ): Flowable<SearchedMovie> {
+    ) {
+//        return moviesLocalDataSource.getMovies(searchTerm)
+        val subscribe = moviesLocalDataSource.getMovies(searchTerm)
+            .subscribeOn(Schedulers.io())
+            .subscribe(
+                {
+                    Log.d(TAG, "getMoviesFromLocalDataSource: onNext $it")
+                    if (!emitter.isCancelled) {
+                        emitter.onNext(it)
+                    }
+                }, {
+                    Log.d(TAG, "getMoviesFromLocalDataSource: onError $it")
+                    if (!emitter.isCancelled) {
+                        emitter.onError(it)
+                    }
+                }, {
+                    Log.d(TAG, "getMoviesFromLocalDataSource: onComplete")
+//                    emitter.onComplete()
+                }
+            )
+        compositeDisposable.add(subscribe)
     }
 
     private fun getMoviesFromRemoteDataSource(searchTerm: String): Flowable<SearchedMovie> {
