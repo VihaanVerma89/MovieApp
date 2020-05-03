@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.noonapp.models.Movie
 
 class MoviesAdapter(val context: Context) :
-    ListAdapter<Any, RecyclerView.ViewHolder>(ExamDiffCallback(context)) {
+    ListAdapter<Any, RecyclerView.ViewHolder>(MoviesDiffCallback(context)) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         var viewHolder: RecyclerView.ViewHolder? = null

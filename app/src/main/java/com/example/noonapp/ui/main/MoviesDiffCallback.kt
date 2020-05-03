@@ -2,15 +2,22 @@ package com.example.noonapp.ui.main
 
 import android.content.Context
 import androidx.recyclerview.widget.DiffUtil
+import com.example.noonapp.models.Movie
 
-class ExamDiffCallback(context: Context) : DiffUtil.ItemCallback<Any>() {
+class MoviesDiffCallback(context: Context) : DiffUtil.ItemCallback<Any>() {
     override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
         var same = false
+        if (oldItem is Movie && newItem is Movie) {
+            same = oldItem.imdbID == newItem.imdbID
+        }
         return same
     }
 
     override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
         var same = false
+        if (oldItem is Movie && newItem is Movie) {
+            same = oldItem == newItem
+        }
         return same
     }
 
