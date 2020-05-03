@@ -2,16 +2,17 @@ package com.example.noonapp.ui.main
 
 import android.util.Log
 import com.example.noonapp.data.NetworkThrowable
+import com.example.noonapp.data.database.DataThrowable
 import com.example.noonapp.data.database.MoviesLocalDataSource
 import com.example.noonapp.data.network.MoviesRemoteDataSource
 import com.example.noonapp.models.SearchedMovie
+import com.squareup.moshi.JsonDataException
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.FlowableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 
 class MoviesRepo(
     val moviesLocalDataSource: MoviesLocalDataSource,
@@ -34,7 +35,7 @@ class MoviesRepo(
     ) {
         val subscribe = getMoviesFromRemoteDataSource(searchTerm)
             .subscribeOn(Schedulers.io())
-            .delay(3, TimeUnit.SECONDS)
+//            .delay(3, TimeUnit.SECONDS)
             .map {
                 insertMovies(it)
                 it
@@ -44,9 +45,14 @@ class MoviesRepo(
                 {
                     Log.d(TAG, "getAndSaveMoviesFromRemoteDataSource: onNext $it")
                 }, {
-                    val moviesException = NetworkThrowable(it, searchTerm)
+                    var any = it
+                    if (it is JsonDataException) {
+                        any = DataThrowable(it, searchTerm)
+                    } else if (it is Throwable) {
+                        any = NetworkThrowable(it, searchTerm)
+                    }
                     if (!emitter.isCancelled) {
-                        emitter.onNext(moviesException)
+                        emitter.onNext(any)
                     }
                     Log.d(TAG, "getAndSaveMoviesFromRemoteDataSource: onError $it")
                 }, {

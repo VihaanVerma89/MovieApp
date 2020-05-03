@@ -3,6 +3,7 @@ package com.example.noonapp.ui.main
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -10,6 +11,8 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.noonapp.R
+import com.example.noonapp.data.NetworkThrowable
+import com.example.noonapp.data.database.DataThrowable
 import com.example.noonapp.data.network.RequestResult
 import com.example.noonapp.di.InjectorUtils
 import com.example.noonapp.models.Movie
@@ -69,7 +72,7 @@ class MoviesFragment : Fragment() {
     }
 
     private fun onGetMoviesResponse(requestResult: RequestResult<Any>) {
-       when (requestResult) {
+        when (requestResult) {
             is RequestResult.Loading -> onGetMoviesResponseLoading(requestResult)
             is RequestResult.Error -> onGetMoviesResponseError(requestResult)
             is RequestResult.Success -> onGetMoviesResponseSuccess(requestResult)
@@ -80,9 +83,11 @@ class MoviesFragment : Fragment() {
         Log.d(TAG, "onGetMoviesResponseLoading: $requestResult")
     }
 
+    private var searchedMovie: SearchedMovie? = null
     private fun onGetMoviesResponseSuccess(requestResult: RequestResult.Success<Any>) {
         val data = requestResult.data
         if (data is SearchedMovie) {
+            searchedMovie = data
             val movies = data.movies
             submitList(movies)
         }
@@ -91,6 +96,29 @@ class MoviesFragment : Fragment() {
     private fun onGetMoviesResponseError(requestResult: RequestResult.Error<Any>) {
 
         Log.d(TAG, "onGetMoviesResponseError: $requestResult")
+        val throwable = requestResult.throwable
+        if (throwable is NetworkThrowable) {
+            onGetMoviesNetworkError(throwable)
+        } else if (throwable is DataThrowable) {
+            onGetMoviesDataThrowable(throwable)
+        }
+    }
+
+    private fun onGetMoviesNetworkError(throwable: NetworkThrowable) {
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.not_connected_retry_later),
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun onGetMoviesDataThrowable(throwable: DataThrowable) {
+        val searchTerm = throwable.any
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.nothing_found_for) + " $searchTerm",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     private lateinit var adapter: MoviesAdapter

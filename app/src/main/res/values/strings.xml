@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Movies</string>
     <string name="search_movies">Search Movies</string>
+    <string name="not_connected_retry_later">Not connected to Internet. Unable to get new results.</string>
+    <string name="nothing_found_for">\"Nothing found for \"</string>
 </resources>
