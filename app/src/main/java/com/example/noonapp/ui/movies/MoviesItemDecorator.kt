@@ -1,4 +1,4 @@
-package com.example.noonapp.ui.main
+package com.example.noonapp.ui.movies
 
 import android.content.Context
 import android.graphics.Rect

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.noonapp.ui.main
+package com.example.noonapp.ui.movies
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

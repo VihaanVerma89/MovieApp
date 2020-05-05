@@ -1,4 +1,4 @@
-package com.example.noonapp.ui.main
+package com.example.noonapp.ui.movies
 
 import android.content.Context
 import androidx.recyclerview.widget.DiffUtil

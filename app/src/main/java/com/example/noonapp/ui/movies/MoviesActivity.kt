@@ -1,9 +1,9 @@
-package com.example.noonapp
+package com.example.noonapp.ui.movies
 
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
-import com.example.noonapp.ui.main.MoviesFragment
+import com.example.noonapp.R
 import kotlinx.android.synthetic.main.main_activity.*
 
 

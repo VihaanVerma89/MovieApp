@@ -21,8 +21,8 @@ import com.example.noonapp.data.database.AppDatabase
 import com.example.noonapp.data.database.MoviesLocalDataSource
 import com.example.noonapp.data.network.MoviesRemoteDataSource
 import com.example.noonapp.data.network.MoviesService
-import com.example.noonapp.ui.main.MoviesRepo
-import com.example.noonapp.ui.main.MoviesViewModelFactory
+import com.example.noonapp.ui.movies.MoviesRepo
+import com.example.noonapp.ui.movies.MoviesViewModelFactory
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

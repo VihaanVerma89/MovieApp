@@ -1,4 +1,4 @@
-package com.example.noonapp.ui.main
+package com.example.noonapp.ui.movies
 
 import android.os.Bundle
 import android.util.Log
