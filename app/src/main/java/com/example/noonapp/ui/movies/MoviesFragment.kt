@@ -1,5 +1,6 @@
 package com.example.noonapp.ui.movies
 
+import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -16,6 +17,7 @@ import com.example.noonapp.data.database.DataThrowable
 import com.example.noonapp.data.models.Movie
 import com.example.noonapp.data.models.SearchedMovie
 import com.example.noonapp.data.network.RequestResult
+import com.example.noonapp.ui.showToastAboveKeyboard
 import com.example.noonapp.ui.utils.RxSearchObservable
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.movies_fragment.*
@@ -30,9 +32,9 @@ class MoviesFragment : DaggerFragment() {
     }
 
     @Inject
-    lateinit var  viewModelFactory: ViewModelProvider.Factory
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val viewModel by viewModels<MoviesViewModel>{
+    private val viewModel by viewModels<MoviesViewModel> {
         viewModelFactory
     }
 
@@ -109,20 +111,20 @@ class MoviesFragment : DaggerFragment() {
     }
 
     private fun onGetMoviesNetworkError(throwable: NetworkThrowable) {
-        Toast.makeText(
-            requireContext(),
+        requireActivity().showToastAboveKeyboard(
             getString(R.string.not_connected_retry_later),
             Toast.LENGTH_SHORT
-        ).show()
+        )
     }
 
     private fun onGetMoviesDataThrowable(throwable: DataThrowable) {
         val searchTerm = throwable.any
-        Toast.makeText(
-            requireContext(),
-            getString(R.string.nothing_found_for) + " $searchTerm",
-            Toast.LENGTH_SHORT
-        ).show()
+        val message = getString(R.string.nothing_found_for) + " $searchTerm"
+        requireActivity().showToastAboveKeyboard(message, Toast.LENGTH_LONG)
+    }
+
+    private fun showToast(activity: Activity, view: View, message: String, duration: Int) {
+
     }
 
     private lateinit var adapter: MoviesAdapter
@@ -138,11 +140,11 @@ class MoviesFragment : DaggerFragment() {
     }
 
 
-    fun submitList(movieList: List<Movie>) {
+    private fun submitList(movieList: List<Movie>) {
         adapter.submitList(movieList)
     }
 
-    fun initSearchView(searchView: SearchView) {
+    private fun initSearchView(searchView: SearchView) {
         RxSearchObservable.fromview(searchView)
             .debounce(300, TimeUnit.MILLISECONDS)
             .filter {
