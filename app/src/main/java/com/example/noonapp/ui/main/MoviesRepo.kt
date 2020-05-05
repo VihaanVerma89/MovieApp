@@ -5,7 +5,7 @@ import com.example.noonapp.data.NetworkThrowable
 import com.example.noonapp.data.database.DataThrowable
 import com.example.noonapp.data.database.MoviesLocalDataSource
 import com.example.noonapp.data.network.MoviesRemoteDataSource
-import com.example.noonapp.models.SearchedMovie
+import com.example.noonapp.data.models.SearchedMovie
 import com.squareup.moshi.JsonDataException
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable

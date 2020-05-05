@@ -23,8 +23,8 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.noonapp.data.database.daos.MoviesDao
 import com.example.noonapp.data.database.daos.SearchTermDao
-import com.example.noonapp.models.Movie
-import com.example.noonapp.models.SearchTerm
+import com.example.noonapp.data.models.Movie
+import com.example.noonapp.data.models.SearchTerm
 
 /**
  * The Room database for this app

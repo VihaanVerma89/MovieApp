@@ -15,8 +15,8 @@ import com.example.noonapp.data.NetworkThrowable
 import com.example.noonapp.data.database.DataThrowable
 import com.example.noonapp.data.network.RequestResult
 import com.example.noonapp.di.InjectorUtils
-import com.example.noonapp.models.Movie
-import com.example.noonapp.models.SearchedMovie
+import com.example.noonapp.data.models.Movie
+import com.example.noonapp.data.models.SearchedMovie
 import com.example.noonapp.ui.utils.RxSearchObservable
 import kotlinx.android.synthetic.main.movies_fragment.*
 import java.util.concurrent.TimeUnit

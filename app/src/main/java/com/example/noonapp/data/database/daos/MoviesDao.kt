@@ -19,7 +19,7 @@ package com.example.noonapp.data.database.daos
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
-import com.example.noonapp.models.Movie
+import com.example.noonapp.data.models.Movie
 
 /**
  * The Data Access Object for the Plant class.

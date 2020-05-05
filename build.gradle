@@ -10,6 +10,7 @@ buildscript {
         roomVersion = "2.2.5"
         lifecycleVersion = '2.2.0'
         fragmentVersion = '1.1.0'
+        daggerVersion = '2.23.2'
     }
 
     repositories {

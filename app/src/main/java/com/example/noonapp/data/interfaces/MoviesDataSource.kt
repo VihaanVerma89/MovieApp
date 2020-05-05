@@ -1,6 +1,6 @@
 package com.example.noonapp.data.interfaces
 
-import com.example.noonapp.models.SearchedMovie
+import com.example.noonapp.data.models.SearchedMovie
 import io.reactivex.Flowable
 
 interface MoviesDataSource {

@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.noonapp.R
 import com.example.noonapp.databinding.ItemMovieBinding
-import com.example.noonapp.models.Movie
+import com.example.noonapp.data.models.Movie
 
 class MovieViewHolder(val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
 

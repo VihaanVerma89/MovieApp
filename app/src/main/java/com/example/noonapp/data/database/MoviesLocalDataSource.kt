@@ -4,7 +4,7 @@ import android.util.Log
 import com.example.noonapp.data.database.daos.MoviesDao
 import com.example.noonapp.data.database.daos.SearchTermDao
 import com.example.noonapp.data.interfaces.MoviesDataSource
-import com.example.noonapp.models.SearchedMovie
+import com.example.noonapp.data.models.SearchedMovie
 import io.reactivex.Flowable
 
 class MoviesLocalDataSource(

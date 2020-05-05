@@ -18,8 +18,8 @@ package com.example.noonapp.data.database.daos
 
 import androidx.room.*
 import com.example.noonapp.data.database.Tables
-import com.example.noonapp.models.SearchTerm
-import com.example.noonapp.models.SearchedMovie
+import com.example.noonapp.data.models.SearchTerm
+import com.example.noonapp.data.models.SearchedMovie
 import io.reactivex.Flowable
 
 /**

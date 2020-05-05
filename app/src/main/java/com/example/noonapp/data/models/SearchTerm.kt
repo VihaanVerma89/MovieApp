@@ -1,4 +1,4 @@
-package com.example.noonapp.models
+package com.example.noonapp.data.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.noonapp.models.Movie
+import com.example.noonapp.data.models.Movie
 
 class MoviesAdapter(val context: Context) :
     ListAdapter<Any, RecyclerView.ViewHolder>(MoviesDiffCallback(context)) {

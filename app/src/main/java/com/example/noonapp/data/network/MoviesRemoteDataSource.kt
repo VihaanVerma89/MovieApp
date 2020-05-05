@@ -2,8 +2,8 @@ package com.example.noonapp.data.network
 
 import com.example.noonapp.BuildConfig
 import com.example.noonapp.data.interfaces.MoviesDataSource
-import com.example.noonapp.models.SearchTerm
-import com.example.noonapp.models.SearchedMovie
+import com.example.noonapp.data.models.SearchTerm
+import com.example.noonapp.data.models.SearchedMovie
 import io.reactivex.Flowable
 
 class MoviesRemoteDataSource(val moviesService: MoviesService) : MoviesDataSource {
