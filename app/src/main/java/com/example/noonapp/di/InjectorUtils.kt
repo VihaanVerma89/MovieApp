@@ -16,63 +16,50 @@
 
 package com.example.noonapp.di
 
-import android.content.Context
-import com.example.noonapp.data.database.AppDatabase
-import com.example.noonapp.data.database.MoviesLocalDataSource
-import com.example.noonapp.data.network.MoviesRemoteDataSource
-import com.example.noonapp.data.network.MoviesService
-import com.example.noonapp.ui.movies.MoviesRepo
-import com.example.noonapp.ui.movies.MoviesViewModelFactory
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.moshi.MoshiConverterFactory
-
 
 /**
  * Static methods used to inject classes needed for various Activities and Fragments.
  */
 object InjectorUtils {
-
-    private fun getMoviesRepository(context: Context): MoviesRepo {
-        val appDatabase = AppDatabase.getInstance(context)
-        val moviesDao = appDatabase.moviesDao()
-        val searchTermDao= appDatabase.searchTermDao()
-        val moviesLocalDataSource = MoviesLocalDataSource(moviesDao, searchTermDao)
-        val movieService = getMovieService()
-        val moviesRemoteDataSource = MoviesRemoteDataSource(movieService)
-        return MoviesRepo(moviesLocalDataSource, moviesRemoteDataSource)
-    }
-
-    private fun getMovieService(): MoviesService {
-        val retrofit = getRetrofit()
-        return retrofit.create(MoviesService::class.java)
-    }
-
-    private fun getRetrofit(): Retrofit {
-        val BASE_URL = "http://www.omdbapi.com/"
-
-
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.level = HttpLoggingInterceptor.Level.BODY
-        val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(interceptor)
-            .build()
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .client(okHttpClient)
-            .build()
-        return retrofit
-    }
-
-
-    fun provideMoviesViewModelFactory(context: Context): MoviesViewModelFactory {
-        val repository = getMoviesRepository(context)
-        return MoviesViewModelFactory(repository)
-    }
+//
+//    private fun getMoviesRepository(context: Context): MoviesRepo {
+//        val appDatabase = AppDatabase.getInstance(context)
+//        val moviesDao = appDatabase.moviesDao()
+//        val searchTermDao= appDatabase.searchTermDao()
+//        val moviesLocalDataSource = MoviesLocalDataSource(moviesDao, searchTermDao)
+//        val movieService = getMovieService()
+//        val moviesRemoteDataSource = MoviesRemoteDataSource(movieService)
+//        return MoviesRepo(moviesLocalDataSource, moviesRemoteDataSource)
+//    }
+//
+//    private fun getMovieService(): MoviesService {
+//        val retrofit = getRetrofit()
+//        return retrofit.create(MoviesService::class.java)
+//    }
+//
+//    private fun getRetrofit(): Retrofit {
+//        val BASE_URL = "http://www.omdbapi.com/"
+//
+//
+//        val interceptor = HttpLoggingInterceptor()
+//        interceptor.level = HttpLoggingInterceptor.Level.BODY
+//        val okHttpClient = OkHttpClient.Builder()
+//            .addInterceptor(interceptor)
+//            .build()
+//
+//        val retrofit = Retrofit.Builder()
+//            .baseUrl(BASE_URL)
+//            .addConverterFactory(MoshiConverterFactory.create())
+//            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//            .client(okHttpClient)
+//            .build()
+//        return retrofit
+//    }
+//
+//
+//    fun provideMoviesViewModelFactory(context: Context): MoviesViewModelFactory {
+//        val repository = getMoviesRepository(context)
+//        return MoviesViewModelFactory(repository)
+//    }
 
 }

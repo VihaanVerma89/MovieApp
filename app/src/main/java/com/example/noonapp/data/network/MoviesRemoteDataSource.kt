@@ -5,8 +5,10 @@ import com.example.noonapp.data.interfaces.MoviesDataSource
 import com.example.noonapp.data.models.SearchTerm
 import com.example.noonapp.data.models.SearchedMovie
 import io.reactivex.Flowable
+import javax.inject.Inject
 
-class MoviesRemoteDataSource(val moviesService: MoviesService) : MoviesDataSource {
+class MoviesRemoteDataSource @Inject constructor(val moviesService: MoviesService) :
+    MoviesDataSource {
 
     private val apiKey = BuildConfig.CONSUMER_KEY
     //    override fun getMovies(searchTerm: String): Flowable<SearchedMovie> {

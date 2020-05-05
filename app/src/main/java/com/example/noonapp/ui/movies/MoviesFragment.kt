@@ -5,31 +5,35 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.noonapp.R
 import com.example.noonapp.data.NetworkThrowable
 import com.example.noonapp.data.database.DataThrowable
-import com.example.noonapp.data.network.RequestResult
-import com.example.noonapp.di.InjectorUtils
 import com.example.noonapp.data.models.Movie
 import com.example.noonapp.data.models.SearchedMovie
+import com.example.noonapp.data.network.RequestResult
 import com.example.noonapp.ui.utils.RxSearchObservable
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.movies_fragment.*
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class MoviesFragment : Fragment() {
+class MoviesFragment : DaggerFragment() {
 
     companion object {
         val TAG = MoviesFragment.javaClass.name
         fun newInstance() = MoviesFragment()
     }
 
-    private val viewModel: MoviesViewModel by viewModels {
-        InjectorUtils.provideMoviesViewModelFactory(requireContext())
+    @Inject
+    lateinit var  viewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel by viewModels<MoviesViewModel>{
+        viewModelFactory
     }
 
 

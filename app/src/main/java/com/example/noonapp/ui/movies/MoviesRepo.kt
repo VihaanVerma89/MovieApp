@@ -1,11 +1,13 @@
 package com.example.noonapp.ui.movies
 
 import android.util.Log
+import com.example.noonapp.data.MoviesRepository
 import com.example.noonapp.data.NetworkThrowable
 import com.example.noonapp.data.database.DataThrowable
 import com.example.noonapp.data.database.MoviesLocalDataSource
-import com.example.noonapp.data.network.MoviesRemoteDataSource
 import com.example.noonapp.data.models.SearchedMovie
+import com.example.noonapp.data.network.MoviesRemoteDataSource
+import com.example.noonapp.di.ApplicationModule
 import com.squareup.moshi.JsonDataException
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -13,12 +15,13 @@ import io.reactivex.FlowableEmitter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class MoviesRepo(
-    val moviesLocalDataSource: MoviesLocalDataSource,
-    val moviesRemoteDataSource: MoviesRemoteDataSource
-//) : MoviesDataSource {
-) {
+
+class MoviesRepo @Inject constructor(
+    @ApplicationModule.MoviesLocalDataSource val moviesLocalDataSource: MoviesLocalDataSource,
+    @ApplicationModule.MoviesRemoteDataSource val moviesRemoteDataSource: MoviesRemoteDataSource
+) : MoviesRepository{
 
     companion object {
         val TAG = MoviesRepo::class.java.name

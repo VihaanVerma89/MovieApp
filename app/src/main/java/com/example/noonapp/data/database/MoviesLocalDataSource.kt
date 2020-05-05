@@ -6,10 +6,11 @@ import com.example.noonapp.data.database.daos.SearchTermDao
 import com.example.noonapp.data.interfaces.MoviesDataSource
 import com.example.noonapp.data.models.SearchedMovie
 import io.reactivex.Flowable
+import javax.inject.Inject
 
-class MoviesLocalDataSource(
-    val moviesDao: MoviesDao,
-    val searchTermDao: SearchTermDao
+class MoviesLocalDataSource @Inject constructor(
+    private val moviesDao: MoviesDao,
+    private val searchTermDao: SearchTermDao
 ) : MoviesDataSource {
 
 

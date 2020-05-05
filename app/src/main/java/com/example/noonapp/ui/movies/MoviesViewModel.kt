@@ -7,8 +7,9 @@ import com.example.noonapp.data.network.RequestResult
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class MoviesViewModel(val repo: MoviesRepo) : ViewModel() {
+class MoviesViewModel @Inject constructor(val repo: MoviesRepo) : ViewModel() {
 
     companion object {
         val TAG = MoviesViewModel::class.java.name
