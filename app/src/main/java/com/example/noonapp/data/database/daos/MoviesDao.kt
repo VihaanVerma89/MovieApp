@@ -21,9 +21,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import com.example.noonapp.data.models.Movie
 
-/**
- * The Data Access Object for the Plant class.
- */
 @Dao
 interface MoviesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)

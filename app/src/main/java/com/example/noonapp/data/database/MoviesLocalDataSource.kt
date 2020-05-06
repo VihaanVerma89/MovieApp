@@ -18,7 +18,6 @@ class MoviesLocalDataSource @Inject constructor(
         val TAG = MoviesLocalDataSource::class.java.name
     }
 
-    //    override fun getMovies(searchTerm: String): Flowable<SearchedMovie> {
     override fun getMovies(searchTerm: String): Flowable<SearchedMovie> {
         val searchedMovie = searchTermDao.getSearchedMovie(searchTerm)
         return searchedMovie
@@ -26,25 +25,11 @@ class MoviesLocalDataSource @Inject constructor(
 
     override fun insertMovies(searchedMovie: SearchedMovie) {
         val searchTerm = searchedMovie.searchTerm
-        val insert = searchTermDao.insert(searchTerm)
         val movies = searchedMovie.movies
         movies.forEach {
-            //            it.searchTermId = insert
             it.searchTerm = searchTerm.searchTerm
         }
         val insertMovies = moviesDao.insertMovies(movies)
         Log.d(TAG, "insertMovies: $insertMovies")
     }
-
-//    private fun insertMovies(searchTerm: String, movieList: List<Movie>) {
-//        val searchTermObj = SearchTerm(searchTerm = searchTerm)
-//        val insert = searchTermDao.insert(searchTermObj)
-//        searchTermObj.searchTermId = insert
-//        movieList.forEach {
-//            it.searchTermId = insert
-//        }
-//        val insertMovies = moviesDao.insertMovies(movieList)
-//        Log.d(TAG, "insertMovies: $insertMovies")
-//    }
-
 }

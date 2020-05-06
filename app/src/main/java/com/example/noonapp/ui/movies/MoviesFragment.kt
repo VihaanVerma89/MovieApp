@@ -66,22 +66,8 @@ class MoviesFragment : DaggerFragment() {
         initRV()
         initViewModelObservers()
         getMoviesResponse("Matrix")
-//        startShimmering()
     }
 
-//    private fun startShimmering() {
-//        shimmer_fl.startShimmer()
-//    }
-//
-//    private fun stopShimmering() {
-//        shimmer_fl.stopShimmer()
-//    }
-
-
-    override fun onStop() {
-//        stopShimmering()
-        super.onStop()
-    }
 
     private fun initViewModelObservers() {
         with(viewModel)
@@ -132,8 +118,6 @@ class MoviesFragment : DaggerFragment() {
                 val handler = Handler()
                 handler.postDelayed({
                     Log.d(TAG, "onGetMoviesResponseSuccess: handler runs")
-//                    stopShimmering()
-//                    shimmer_fl.visibility = View.GONE
                     movies_rv.visibility = View.VISIBLE
                 }, 500)
             }

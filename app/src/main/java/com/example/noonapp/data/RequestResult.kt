@@ -8,7 +8,6 @@ sealed class RequestResult<out R> {
 
     data class Success<out T>(val data: T) : RequestResult<T>()
     data class Error<out T>(val throwable: Throwable) : RequestResult<T>()
-//    data class Loading<out T>(val any: Any) : Result<T>()
     data class Loading<out T>(val any: T) : RequestResult<T>()
 
     override fun toString(): String {

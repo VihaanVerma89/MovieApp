@@ -23,9 +23,6 @@ import com.example.noonapp.data.database.daos.SearchTermDao
 import com.example.noonapp.data.models.Movie
 import com.example.noonapp.data.models.SearchTerm
 
-/**
- * The Room database for this app
- */
 @Database(entities = [Movie::class, SearchTerm::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun moviesDao(): MoviesDao

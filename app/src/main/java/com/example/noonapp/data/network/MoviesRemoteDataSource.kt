@@ -11,9 +11,7 @@ class MoviesRemoteDataSource @Inject constructor(val moviesService: MoviesServic
     MoviesDataSource {
 
     private val apiKey = BuildConfig.CONSUMER_KEY
-    //    override fun getMovies(searchTerm: String): Flowable<SearchedMovie> {
     override fun getMovies(searchTerm: String): Flowable<SearchedMovie> {
-//        val moviesResponse = moviesService.getMoviesResponse(searchTerm, apiKey).blockingGet()
         return moviesService.getMoviesResponse(searchTerm, apiKey)
             .map {
                 val searchTermObj = SearchTerm(searchTerm = searchTerm)
@@ -21,15 +19,10 @@ class MoviesRemoteDataSource @Inject constructor(val moviesService: MoviesServic
                 searchedMovie
             }
             .toFlowable()
-//        return Flowable.fromIterable(moviesResponse.movies).toList().toFlowable()
     }
 
     override fun insertMovies(searchedMovie: SearchedMovie) {
 
     }
-
-//    override fun insertMovies(searchTerm: String, movieList: List<Movie>) {
-//
-//    }
 
 }

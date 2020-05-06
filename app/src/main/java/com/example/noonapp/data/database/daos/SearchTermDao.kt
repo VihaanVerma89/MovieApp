@@ -22,9 +22,6 @@ import com.example.noonapp.data.models.SearchTerm
 import com.example.noonapp.data.models.SearchedMovie
 import io.reactivex.Flowable
 
-/**
- * The Data Access Object for the Plant class.
- */
 @Dao
 interface SearchTermDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -27,9 +27,6 @@ class MoviesRepo @Inject constructor(
         val TAG = MoviesRepo::class.java.name
     }
 
-//    fun getMoviesResponse(searchTerm: String): Flowable<> {
-//    }
-
     private val compositeDisposable = CompositeDisposable()
 
     private fun getAndInsertMoviesFromRemoteDataSource(
@@ -78,22 +75,15 @@ class MoviesRepo @Inject constructor(
 
     }
 
-    //    override fun insertMovies(searchedMovie: SearchedMovie) {
     fun insertMovies(searchedMovie: SearchedMovie) {
         moviesLocalDataSource.insertMovies(searchedMovie)
     }
-
-//    override fun insertMovies(searchTerm: String, movieList: List<Movie>) {
-//
-//    }
 
 
     private fun getMoviesFromLocalDataSource(
         emitter: FlowableEmitter<Any>,
         searchTerm: String
-//    ): Flowable<SearchedMovie> {
     ) {
-//        return moviesLocalDataSource.getMovies(searchTerm)
         val subscribe = moviesLocalDataSource.getMovies(searchTerm)
             .subscribeOn(Schedulers.io())
             .subscribe(
@@ -109,7 +99,6 @@ class MoviesRepo @Inject constructor(
                     }
                 }, {
                     Log.d(TAG, "getMoviesFromLocalDataSource: onComplete")
-//                    emitter.onComplete()
                 }
             )
         compositeDisposable.add(subscribe)

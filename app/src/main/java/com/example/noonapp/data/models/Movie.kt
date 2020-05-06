@@ -12,9 +12,6 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 @Entity(tableName = Tables.MOVIES)
 data class Movie(
-//    @Transient
-//    var searchTermId: Long=-1,
-//    @Transient
     var searchTerm: String="",
     @PrimaryKey
     @Json(name = "imdbID")
