@@ -30,6 +30,9 @@ interface SearchTermDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(searchTerm: SearchTerm): Long
 
+    @Query("SELECT * FROM ${Tables.SEARCH_TERMS} where searchTerm = :searchTerm")
+    fun getSearchTerm(searchTerm: String): SearchTerm
+
     @Transaction
     @Query("SELECT * FROM ${Tables.SEARCH_TERMS} where searchTerm = :searchTerm")
     fun getSearchedMovie(searchTerm: String): Flowable<SearchedMovie>
