@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.noonapp.R
 import com.example.noonapp.data.RequestResult
 import com.example.noonapp.data.database.DataThrowable
-import com.example.noonapp.data.models.Movie
+import com.example.noonapp.data.models.MovieShimmer
 import com.example.noonapp.data.models.SearchedMovie
 import com.example.noonapp.data.network.NetworkThrowable
 import com.example.noonapp.ui.showToastAboveKeyboard
@@ -67,20 +67,20 @@ class MoviesFragment : DaggerFragment() {
         initRV()
         initViewModelObservers()
         getMoviesResponse("Matrix")
-        startShimmering()
+//        startShimmering()
     }
 
-    private fun startShimmering() {
-        shimmer_fl.startShimmer()
-    }
-
-    private fun stopShimmering() {
-        shimmer_fl.stopShimmer()
-    }
+//    private fun startShimmering() {
+//        shimmer_fl.startShimmer()
+//    }
+//
+//    private fun stopShimmering() {
+//        shimmer_fl.stopShimmer()
+//    }
 
 
     override fun onStop() {
-        stopShimmering()
+//        stopShimmering()
         super.onStop()
     }
 
@@ -103,10 +103,23 @@ class MoviesFragment : DaggerFragment() {
     }
 
     private fun onGetMoviesResponseLoading(requestResult: RequestResult.Loading<Any>) {
-        shimmer_fl.visibility = View.VISIBLE
-        startShimmering()
-        movies_rv.visibility = View.GONE
+//        shimmer_fl.visibility = View.VISIBLE
+        val shimmerList = getShimmerList()
+        val runnable = Runnable {
+            Log.d(TAG, "onGetMoviesResponseLoading: shimmerList commited")
+        }
+        submitList(shimmerList, runnable)
+        movies_rv.visibility = View.VISIBLE
         Log.d(TAG, "onGetMoviesResponseLoading: ${requestResult.toString()}")
+    }
+
+
+    private fun getShimmerList(): ArrayList<Any> {
+        val arrayListOf: ArrayList<Any> = arrayListOf<Any>()
+        for (i in 0..10) {
+            arrayListOf.add(MovieShimmer())
+        }
+        return arrayListOf
     }
 
     private var searchedMovie: SearchedMovie? = null
@@ -121,8 +134,8 @@ class MoviesFragment : DaggerFragment() {
                 val handler = Handler()
                 handler.postDelayed({
                     Log.d(TAG, "onGetMoviesResponseSuccess: handler runs")
-                    stopShimmering()
-                    shimmer_fl.visibility = View.GONE
+//                    stopShimmering()
+//                    shimmer_fl.visibility = View.GONE
                     movies_rv.visibility = View.VISIBLE
                 }, 500)
             }
@@ -171,7 +184,7 @@ class MoviesFragment : DaggerFragment() {
     }
 
 
-    private fun submitList(movieList: List<Movie>, runnable: Runnable) {
+    private fun submitList(movieList: List<Any>, runnable: Runnable) {
         adapter.submitList(movieList, runnable)
     }
 

@@ -1,4 +1,4 @@
-package com.example.noonapp.ui.movies
+package com.example.noonapp.ui.movies.viewholders
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.noonapp.R
-import com.example.noonapp.databinding.ItemMovieBinding
 import com.example.noonapp.data.models.Movie
+import com.example.noonapp.databinding.ItemMovieBinding
 
 class MovieViewHolder(val binding: ItemMovieBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -20,7 +20,8 @@ class MovieViewHolder(val binding: ItemMovieBinding) : RecyclerView.ViewHolder(b
             viewGroup: ViewGroup
         ): MovieViewHolder {
             val binding = DataBindingUtil.inflate<ItemMovieBinding>(
-                inflater, layout, viewGroup, false
+                inflater,
+                layout, viewGroup, false
             )
             return MovieViewHolder(
                 binding
