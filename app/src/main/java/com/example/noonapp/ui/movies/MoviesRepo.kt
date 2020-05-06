@@ -29,7 +29,7 @@ class MoviesRepo @Inject constructor(
 
     private val compositeDisposable = CompositeDisposable()
 
-    private fun getAndInsertMoviesFromRemoteDataSource(
+    override fun getAndInsertMoviesFromRemoteDataSource(
         emitter: FlowableEmitter<Any>,
         searchTerm: String
     ) {
@@ -65,7 +65,7 @@ class MoviesRepo @Inject constructor(
         compositeDisposable.add(subscribe)
     }
 
-    fun getMovies(searchTerm: String): Flowable<Any> {
+    override fun getMovies(searchTerm: String): Flowable<Any> {
         return Flowable.create({ emitter ->
             compositeDisposable.clear()
             getAndInsertMoviesFromRemoteDataSource(emitter, searchTerm)
@@ -75,12 +75,12 @@ class MoviesRepo @Inject constructor(
 
     }
 
-    fun insertMovies(searchedMovie: SearchedMovie) {
+    override  fun insertMovies(searchedMovie: SearchedMovie) {
         moviesLocalDataSource.insertMovies(searchedMovie)
     }
 
 
-    private fun getMoviesFromLocalDataSource(
+    override fun getMoviesFromLocalDataSource(
         emitter: FlowableEmitter<Any>,
         searchTerm: String
     ) {
@@ -104,7 +104,7 @@ class MoviesRepo @Inject constructor(
         compositeDisposable.add(subscribe)
     }
 
-    private fun getMoviesFromRemoteDataSource(searchTerm: String): Flowable<SearchedMovie> {
+    override fun getMoviesFromRemoteDataSource(searchTerm: String): Flowable<SearchedMovie> {
         return moviesRemoteDataSource.getMovies(searchTerm)
     }
 
