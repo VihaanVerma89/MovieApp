@@ -26,16 +26,6 @@ import com.example.noonapp.data.models.Movie
  */
 @Dao
 interface MoviesDao {
-//    @Query("SELECT * FROM ${Tables.MOVIES}")
-//    fun getMovies(searchTerm: String): Flowable<List<Movie>>
-
-
-//    @Transaction
-//    @Query("SELECT * FROM ${Tables.SEARCH_TERMS}")
-//    fun getSearchedMovies(searchTerm: String): Flowable<List<SearchedMovie>>
-
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMovies(movies: List<Movie>): List<Long>
-
 }
