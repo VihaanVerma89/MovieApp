@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import com.example.noonapp.R
-import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.android.synthetic.main.movies_activity.*
 
 
 class MoviesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
+        setContentView(R.layout.movies_activity)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_containerl_fl, MoviesFragment.newInstance())

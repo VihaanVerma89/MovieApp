@@ -65,6 +65,11 @@ class MoviesFragment : DaggerFragment() {
         initRV()
         initViewModelObservers()
         getMoviesResponse("Matrix")
+        startShimmering()
+    }
+
+    private fun startShimmering() {
+        shimmer_fl.startShimmer()
     }
 
 
@@ -119,7 +124,7 @@ class MoviesFragment : DaggerFragment() {
 
     private fun onGetMoviesDataThrowable(throwable: DataThrowable) {
         val searchTerm = throwable.any
-        val message = getString(R.string.nothing_found_for) + " $searchTerm"
+        val message = "${getString(R.string.nothing_found_for)} \"$searchTerm\""
         requireActivity().showToastAboveKeyboard(message, Toast.LENGTH_LONG)
     }
 
