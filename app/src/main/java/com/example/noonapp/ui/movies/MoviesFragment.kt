@@ -2,6 +2,7 @@ package com.example.noonapp.ui.movies
 
 import android.app.Activity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.*
 import android.widget.Toast
@@ -12,14 +13,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.noonapp.R
-import com.example.noonapp.data.NetworkThrowable
+import com.example.noonapp.data.RequestResult
 import com.example.noonapp.data.database.DataThrowable
 import com.example.noonapp.data.models.Movie
 import com.example.noonapp.data.models.SearchedMovie
-import com.example.noonapp.data.network.RequestResult
+import com.example.noonapp.data.network.NetworkThrowable
 import com.example.noonapp.ui.showToastAboveKeyboard
 import com.example.noonapp.ui.utils.RxSearchObservable
 import dagger.android.support.DaggerFragment
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.movies_fragment.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -72,6 +74,15 @@ class MoviesFragment : DaggerFragment() {
         shimmer_fl.startShimmer()
     }
 
+    private fun stopShimmering() {
+        shimmer_fl.stopShimmer()
+    }
+
+
+    override fun onStop() {
+        stopShimmering()
+        super.onStop()
+    }
 
     private fun initViewModelObservers() {
         with(viewModel)
@@ -83,6 +94,7 @@ class MoviesFragment : DaggerFragment() {
     }
 
     private fun onGetMoviesResponse(requestResult: RequestResult<Any>) {
+        Log.d(TAG, "onGetMoviesResponse: ${requestResult.toString()}")
         when (requestResult) {
             is RequestResult.Loading -> onGetMoviesResponseLoading(requestResult)
             is RequestResult.Error -> onGetMoviesResponseError(requestResult)
@@ -91,16 +103,30 @@ class MoviesFragment : DaggerFragment() {
     }
 
     private fun onGetMoviesResponseLoading(requestResult: RequestResult.Loading<Any>) {
-        Log.d(TAG, "onGetMoviesResponseLoading: $requestResult")
+        shimmer_fl.visibility = View.VISIBLE
+        startShimmering()
+        movies_rv.visibility = View.GONE
+        Log.d(TAG, "onGetMoviesResponseLoading: ${requestResult.toString()}")
     }
 
     private var searchedMovie: SearchedMovie? = null
     private fun onGetMoviesResponseSuccess(requestResult: RequestResult.Success<Any>) {
+        Log.d(TAG, "onGetMoviesResponseSuccess: ${requestResult.toString()}")
         val data = requestResult.data
         if (data is SearchedMovie) {
             searchedMovie = data
             val movies = data.movies
-            submitList(movies)
+            val commitCallback = Runnable {
+                Log.d(TAG, "onGetMoviesResponseSuccess: Runnable commited")
+                val handler = Handler()
+                handler.postDelayed({
+                    Log.d(TAG, "onGetMoviesResponseSuccess: handler runs")
+                    stopShimmering()
+                    shimmer_fl.visibility = View.GONE
+                    movies_rv.visibility = View.VISIBLE
+                }, 500)
+            }
+            submitList(movies, commitCallback)
         }
     }
 
@@ -145,8 +171,8 @@ class MoviesFragment : DaggerFragment() {
     }
 
 
-    private fun submitList(movieList: List<Movie>) {
-        adapter.submitList(movieList)
+    private fun submitList(movieList: List<Movie>, runnable: Runnable) {
+        adapter.submitList(movieList, runnable)
     }
 
     private fun initSearchView(searchView: SearchView) {
@@ -158,6 +184,7 @@ class MoviesFragment : DaggerFragment() {
             .map {
                 it.toLowerCase().trim()
             }
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 Log.d(TAG, "initSearchView onNext: $it")
                 viewModel.getMovies(it)

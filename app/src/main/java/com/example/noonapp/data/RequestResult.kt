@@ -1,4 +1,4 @@
-package com.example.noonapp.data.network
+package com.example.noonapp.data
 
 /**
  * A generic class that holds a value with its loading status.

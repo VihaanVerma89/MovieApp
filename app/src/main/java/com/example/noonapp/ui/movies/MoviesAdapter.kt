@@ -1,6 +1,7 @@
 package com.example.noonapp.ui.movies
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
@@ -9,6 +10,9 @@ import com.example.noonapp.data.models.Movie
 
 class MoviesAdapter(val context: Context) :
     ListAdapter<Any, RecyclerView.ViewHolder>(MoviesDiffCallback(context)) {
+    companion object{
+        val TAG = MoviesAdapter::class.java.name
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         var viewHolder: RecyclerView.ViewHolder? = null
@@ -20,6 +24,7 @@ class MoviesAdapter(val context: Context) :
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
+        Log.d(TAG, "onBindViewHolder: $item")
         when (holder) {
             is MovieViewHolder -> holder.bind(item as Movie)
         }

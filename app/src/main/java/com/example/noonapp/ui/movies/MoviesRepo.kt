@@ -2,11 +2,11 @@ package com.example.noonapp.ui.movies
 
 import android.util.Log
 import com.example.noonapp.data.MoviesRepository
-import com.example.noonapp.data.NetworkThrowable
 import com.example.noonapp.data.database.DataThrowable
 import com.example.noonapp.data.database.MoviesLocalDataSource
 import com.example.noonapp.data.models.SearchedMovie
 import com.example.noonapp.data.network.MoviesRemoteDataSource
+import com.example.noonapp.data.network.NetworkThrowable
 import com.example.noonapp.di.ApplicationModule
 import com.squareup.moshi.JsonDataException
 import io.reactivex.BackpressureStrategy
@@ -52,7 +52,10 @@ class MoviesRepo @Inject constructor(
                     if (it is JsonDataException) {
                         any = DataThrowable(it, searchTerm)
                     } else if (it is Throwable) {
-                        any = NetworkThrowable(it, searchTerm)
+                        any = NetworkThrowable(
+                            it,
+                            searchTerm
+                        )
                     }
                     if (!emitter.isCancelled) {
                         emitter.onNext(any)
