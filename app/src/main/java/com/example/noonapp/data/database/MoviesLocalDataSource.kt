@@ -25,6 +25,7 @@ class MoviesLocalDataSource @Inject constructor(
 
     override fun insertMovies(searchedMovie: SearchedMovie) {
         val searchTerm = searchedMovie.searchTerm
+        searchTermDao.insert(searchTerm)
         val movies = searchedMovie.movies
         movies.forEach {
             it.searchTerm = searchTerm.searchTerm
