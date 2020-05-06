@@ -1,6 +1,5 @@
 package com.example.noonapp.ui.movies
 
-import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -103,7 +102,6 @@ class MoviesFragment : DaggerFragment() {
     }
 
     private fun onGetMoviesResponseLoading(requestResult: RequestResult.Loading<Any>) {
-//        shimmer_fl.visibility = View.VISIBLE
         val shimmerList = getShimmerList()
         val runnable = Runnable {
             Log.d(TAG, "onGetMoviesResponseLoading: shimmerList commited")
@@ -154,22 +152,23 @@ class MoviesFragment : DaggerFragment() {
         }
     }
 
+    private var toast: Toast? = null
     private fun onGetMoviesNetworkError(throwable: NetworkThrowable) {
-        requireActivity().showToastAboveKeyboard(
+        toast?.cancel()
+        toast = requireActivity().showToastAboveKeyboard(
             getString(R.string.not_connected_retry_later),
             Toast.LENGTH_SHORT
         )
     }
 
     private fun onGetMoviesDataThrowable(throwable: DataThrowable) {
+        toast?.cancel()
         val searchTerm = throwable.any
         val message = "${getString(R.string.nothing_found_for)} \"$searchTerm\""
-        requireActivity().showToastAboveKeyboard(message, Toast.LENGTH_LONG)
+        toast=
+            requireActivity().showToastAboveKeyboard(message, Toast.LENGTH_LONG)
     }
 
-    private fun showToast(activity: Activity, view: View, message: String, duration: Int) {
-
-    }
 
     private lateinit var adapter: MoviesAdapter
     private lateinit var itemDecorator: MoviesItemDecorator
