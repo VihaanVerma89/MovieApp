@@ -1,5 +1,6 @@
 package com.example.noonapp.data.database
 
+import android.os.Build
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -14,10 +15,12 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 
 @RunWith(AndroidJUnit4::class)
 @SmallTest
+@Config(sdk = [Build.VERSION_CODES.P])
 class SearchDaoTest {
 
     private lateinit var database: AppDatabase
@@ -28,6 +31,8 @@ class SearchDaoTest {
     @Before
     fun initDb() {
 
+        // using an in-memory database because the information stored here disappears when the
+        // process is killed
         database = Room.inMemoryDatabaseBuilder(
             getApplicationContext(),
             AppDatabase::class.java
@@ -41,14 +46,37 @@ class SearchDaoTest {
     }
 
     @Test
-    fun insertSearchTermAndGetById() {
-        val searchTerm = SearchTerm("Matrix")
-        database.searchTermDao().insert(searchTerm)
-        val searchTermDb = database.searchTermDao().getSearchTerm(searchTerm.searchTerm)
-
+    fun insertSearchTermAndGet() {
+        val searchTerm = "Matrix"
+        insertSearchTerm(searchTerm)
+        val searchTermDb = database.searchTermDao().getSearchTerm(searchTerm)
         assertThat<SearchTerm>(searchTermDb as SearchTerm, notNullValue())
-        assertThat(searchTermDb.searchTerm, `is`(searchTerm.searchTerm))
-
+        assertThat(searchTermDb.searchTerm, `is`(searchTerm))
     }
+
+    private fun insertSearchTerm(searchTerm: String) {
+        val searchTerm = SearchTerm(searchTerm)
+        database.searchTermDao().insert(searchTerm)
+    }
+
+
+    @Test
+    fun insertSearchTermsAndGet() {
+        val searchTermsInsertList =
+            listOf<String>("Matrix", "Batman", "Aevengers", "The Last Samurai")
+        val searchTermDao = database.searchTermDao()
+        searchTermDao.deleteAll()
+        for (insertTerm in searchTermsInsertList) {
+            val searchTerm = SearchTerm(insertTerm)
+            searchTermDao.insert(searchTerm)
+        }
+        val searchTermsListGet = searchTermDao.getAllSearchTerm()
+
+        for ((index, value) in searchTermsInsertList.withIndex()) {
+            val getSearchTerm = searchTermsListGet[index]
+            assertThat(value, `is`(getSearchTerm.searchTerm))
+        }
+    }
+
 
 }
