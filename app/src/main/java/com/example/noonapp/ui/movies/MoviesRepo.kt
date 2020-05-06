@@ -32,7 +32,7 @@ class MoviesRepo @Inject constructor(
 
     private val compositeDisposable = CompositeDisposable()
 
-    private fun getAndSaveMoviesFromRemoteDataSource(
+    private fun getAndInsertMoviesFromRemoteDataSource(
         emitter: FlowableEmitter<Any>,
         searchTerm: String
     ) {
@@ -71,7 +71,7 @@ class MoviesRepo @Inject constructor(
     fun getMovies(searchTerm: String): Flowable<Any> {
         return Flowable.create({ emitter ->
             compositeDisposable.clear()
-            getAndSaveMoviesFromRemoteDataSource(emitter, searchTerm)
+            getAndInsertMoviesFromRemoteDataSource(emitter, searchTerm)
             getMoviesFromLocalDataSource(emitter, searchTerm)
 
         }, BackpressureStrategy.BUFFER)
