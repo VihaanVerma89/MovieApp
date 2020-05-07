@@ -21,7 +21,7 @@ import javax.inject.Inject
 class MoviesRepo @Inject constructor(
     @ApplicationModule.MoviesLocalDataSource val moviesLocalDataSource: MoviesLocalDataSource,
     @ApplicationModule.MoviesRemoteDataSource val moviesRemoteDataSource: MoviesRemoteDataSource
-) : MoviesRepository{
+) : MoviesRepository {
 
     companion object {
         val TAG = MoviesRepo::class.java.name
@@ -47,6 +47,7 @@ class MoviesRepo @Inject constructor(
                 }, {
                     var any = it
                     if (it is JsonDataException) {
+                        // 200 should not return error json but since it is we are wrapping it here.
                         any = DataThrowable(it, searchTerm)
                     } else if (it is Throwable) {
                         any = NetworkThrowable(
@@ -75,7 +76,7 @@ class MoviesRepo @Inject constructor(
 
     }
 
-    override  fun insertMovies(searchedMovie: SearchedMovie) {
+    override fun insertMovies(searchedMovie: SearchedMovie) {
         moviesLocalDataSource.insertMovies(searchedMovie)
     }
 
