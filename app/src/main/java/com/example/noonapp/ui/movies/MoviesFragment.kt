@@ -93,7 +93,8 @@ class MoviesFragment : DaggerFragment() {
         }
         submitList(shimmerList, runnable)
         showMoviesRv()
-        hideRetry()
+        hideNotFoundView()
+        hideRetryView()
         Log.d(TAG, "onGetMoviesResponseLoading: ${requestResult.toString()}")
     }
 
@@ -132,7 +133,8 @@ class MoviesFragment : DaggerFragment() {
 //                }, 500)
             }
             submitList(movies, commitCallback)
-            hideRetry()
+            hideRetryView()
+            hideNotFoundView()
             showMoviesRv()
         } else {
             // database doesn't have movies
@@ -150,7 +152,8 @@ class MoviesFragment : DaggerFragment() {
                     // for this search term we don't have anything in database
                     // and we aren't able to connect to internet
                     hideMoviesRv()
-                    showRetry()
+                    hideNotFoundView()
+                    showRetryView()
                 }
             }
         }
@@ -163,7 +166,8 @@ class MoviesFragment : DaggerFragment() {
                 // database doesn't have movies
                 // and we received network error
                 hideMoviesRv()
-                showRetry()
+                showRetryView()
+                hideNotFoundView()
             } else {
                 // database is showing cached movies
                 // we are unable to refresh
@@ -173,8 +177,7 @@ class MoviesFragment : DaggerFragment() {
                     Toast.LENGTH_SHORT
                 )
             }
-        }
-        else{
+        } else {
             // wait for database to push data to view
         }
     }
@@ -208,28 +211,47 @@ class MoviesFragment : DaggerFragment() {
         movies_rv.visibility = View.VISIBLE
     }
 
-    private fun showRetry() {
+    private fun showRetryView() {
         retry_cl.visibility = View.VISIBLE
-        retry_iv.playAnimation()
-        retry_iv.setOnClickListener {
-            retry_iv.playAnimation()
+        retry_lv.playAnimation()
+        retry_lv.setOnClickListener {
+            retry_lv.playAnimation()
         }
         retry_btn.setOnClickListener {
             getMoviesResponse(searchTerm)
         }
     }
 
-    private fun hideRetry() {
+    private fun hideRetryView() {
         retry_cl.visibility = View.GONE
     }
 
     private fun onGetMoviesDataThrowable(dataThrowable: DataThrowable) {
-        toast?.cancel()
-        val searchTerm = dataThrowable.any
-        val message = "${getString(R.string.nothing_found_for)} \"$searchTerm\""
-        toast =
-            requireActivity().showToastAboveKeyboard(message, Toast.LENGTH_LONG)
+//        toast?.cancel()
+//        val searchTerm = dataThrowable.any
+//        val message = "${getString(R.string.nothing_found_for)} \"$searchTerm\""
+//        toast =
+//            requireActivity().showToastAboveKeyboard(message, Toast.LENGTH_LONG)
         this.dataThrowable = dataThrowable
+        showNotFoundView(dataThrowable)
+        hideMoviesRv()
+        hideRetryView()
+    }
+
+    private fun showNotFoundView(dataThrowable: DataThrowable) {
+        val searchTerm = dataThrowable.any ?: ""
+        if (searchTerm is String) {
+            if (searchTerm.isNotEmpty()) {
+                val string = getString(R.string.not_found, searchTerm)
+                not_found_tv.text = string
+            }
+        }
+        not_found_lv.playAnimation()
+        not_found_cl.visibility = View.VISIBLE
+    }
+
+    private fun hideNotFoundView() {
+        not_found_cl.visibility = View.GONE
     }
 
 
@@ -262,12 +284,14 @@ class MoviesFragment : DaggerFragment() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 Log.d(TAG, "initSearchView onNext: $it")
-                viewModel.getMovies(it)
+                getMoviesResponse(it)
+//                viewModel.getMovies(it)
             }, {
                 Log.d(TAG, "initSearchView onError: $it")
             }, {
                 Log.d(TAG, "initSearchView onComplete")
-                viewModel.getMovies("batman")
+//                viewModel.getMovies("batman")
+                getMoviesResponse(searchTerm)
                 initSearchView(searchView)
             })
     }
