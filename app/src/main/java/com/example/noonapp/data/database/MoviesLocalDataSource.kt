@@ -1,9 +1,11 @@
 package com.example.noonapp.data.database
 
 import android.util.Log
+import com.example.noonapp.data.DataSource
 import com.example.noonapp.data.database.daos.MoviesDao
 import com.example.noonapp.data.database.daos.SearchTermDao
 import com.example.noonapp.data.interfaces.MoviesDataSource
+import com.example.noonapp.data.models.SearchTerm
 import com.example.noonapp.data.models.SearchedMovie
 import io.reactivex.Flowable
 import javax.inject.Inject
@@ -19,9 +21,20 @@ class MoviesLocalDataSource @Inject constructor(
     }
 
     override fun getMovies(searchTerm: String): Flowable<SearchedMovie> {
-        val searchedMovie = searchTermDao.getSearchedMovie(searchTerm)
-        return searchedMovie
+        return searchTermDao.getSearchedMovie(searchTerm).map {
+            var searchedMovie = SearchedMovie(SearchTerm(searchTerm), arrayListOf())
+            if (it.isNotEmpty()) {
+                searchedMovie = it[0]
+            }
+            searchedMovie.source = DataSource.DATABASE
+            searchedMovie
+        }
     }
+
+//    override fun getMovies(searchTerm: String): Flowable<SearchedMovie> {
+//        val searchedMovie = searchTermDao.getSearchedMovie(searchTerm)
+//        return searchedMovie
+//    }
 
     override fun insertMovies(searchedMovie: SearchedMovie) {
         val searchTerm = searchedMovie.searchTerm

@@ -1,6 +1,7 @@
 package com.example.noonapp.data.network
 
 import com.example.noonapp.BuildConfig
+import com.example.noonapp.data.DataSource
 import com.example.noonapp.data.interfaces.MoviesDataSource
 import com.example.noonapp.data.models.SearchTerm
 import com.example.noonapp.data.models.SearchedMovie
@@ -16,6 +17,7 @@ class MoviesRemoteDataSource @Inject constructor(val moviesService: MoviesServic
             .map {
                 val searchTermObj = SearchTerm(searchTerm = searchTerm)
                 val searchedMovie = SearchedMovie(searchTermObj, it.movies)
+                searchedMovie.source = DataSource.NETWORK
                 searchedMovie
             }
             .toFlowable()

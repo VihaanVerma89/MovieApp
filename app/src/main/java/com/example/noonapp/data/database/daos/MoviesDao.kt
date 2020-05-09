@@ -19,10 +19,16 @@ package com.example.noonapp.data.database.daos
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import com.example.noonapp.data.database.Tables
 import com.example.noonapp.data.models.Movie
+import io.reactivex.Flowable
 
 @Dao
 interface MoviesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMovies(movies: List<Movie>): List<Long>
+
+    @Query("SELECT * FROM ${Tables.MOVIES}")
+    fun getAllMovies(): Flowable<List<Movie>>
 }

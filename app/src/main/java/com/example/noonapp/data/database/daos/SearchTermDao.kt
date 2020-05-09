@@ -36,7 +36,8 @@ interface SearchTermDao {
 
     @Transaction
     @Query("SELECT * FROM ${Tables.SEARCH_TERMS} where searchTerm = :searchTerm")
-    fun getSearchedMovie(searchTerm: String): Flowable<SearchedMovie>
+//    fun getSearchedMovie(searchTerm: String): Flowable<SearchedMovie>
+    fun getSearchedMovie(searchTerm: String): Flowable<List<SearchedMovie>>
 
     @Query("DELETE FROM ${Tables.SEARCH_TERMS}")
     fun deleteAll()

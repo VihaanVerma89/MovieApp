@@ -1,7 +1,6 @@
 package com.example.noonapp.ui.movies
 
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.*
 import android.widget.Toast
@@ -65,7 +64,7 @@ class MoviesFragment : DaggerFragment() {
     private fun init() {
         initRV()
         initViewModelObservers()
-        getMoviesResponse("Matrix")
+        getMoviesResponse(searchTerm)
     }
 
 
@@ -93,7 +92,8 @@ class MoviesFragment : DaggerFragment() {
             Log.d(TAG, "onGetMoviesResponseLoading: shimmerList commited")
         }
         submitList(shimmerList, runnable)
-        movies_rv.visibility = View.VISIBLE
+        showMoviesRv()
+        hideRetry()
         Log.d(TAG, "onGetMoviesResponseLoading: ${requestResult.toString()}")
     }
 
@@ -107,26 +107,84 @@ class MoviesFragment : DaggerFragment() {
     }
 
     private var searchedMovie: SearchedMovie? = null
+    private var networkThrowable: NetworkThrowable? = null
+    private var dataThrowable: DataThrowable? = null
     private fun onGetMoviesResponseSuccess(requestResult: RequestResult.Success<Any>) {
         Log.d(TAG, "onGetMoviesResponseSuccess: ${requestResult.toString()}")
         val data = requestResult.data
         if (data is SearchedMovie) {
-            searchedMovie = data
-            val movies = data.movies
-            val commitCallback = Runnable {
-                Log.d(TAG, "onGetMoviesResponseSuccess: Runnable commited")
-                val handler = Handler()
-                handler.postDelayed({
-                    Log.d(TAG, "onGetMoviesResponseSuccess: handler runs")
-                    movies_rv.visibility = View.VISIBLE
-                }, 500)
+            if (data.isFromDatabase()) {
+                onGetMoviesResponseDatabaseSuccess(data)
             }
-            submitList(movies, commitCallback)
         }
     }
 
-    private fun onGetMoviesResponseError(requestResult: RequestResult.Error<Any>) {
+    private fun onGetMoviesResponseDatabaseSuccess(data: SearchedMovie) {
+        searchedMovie = data
+        val movies = data.movies
+        if (movies.isNotEmpty()) {
+            val commitCallback = Runnable {
+                Log.d(TAG, "onGetMoviesResponseSuccess: Runnable commited")
+//                val handler = Handler()
+//                handler.postDelayed({
+//                    Log.d(TAG, "onGetMoviesResponseSuccess: handler runs")
+//                    movies_rv.visibility = View.VISIBLE
+//                }, 500)
+            }
+            submitList(movies, commitCallback)
+            hideRetry()
+            showMoviesRv()
+        } else {
+            // database doesn't have movies
+            showRetryForDbIfRequired(data)
+            showNotFoundIfRequired(data)
+        }
+    }
 
+    private fun showRetryForDbIfRequired(data: SearchedMovie) {
+        val networkThrowableSearchTerm = networkThrowable?.any ?: ""
+        if (networkThrowableSearchTerm is String) {
+            if (networkThrowableSearchTerm.isNotEmpty()) {
+                val searchTermObj = data.searchTerm
+                if (networkThrowableSearchTerm == searchTermObj.searchTerm) {
+                    // for this search term we don't have anything in database
+                    // and we aren't able to connect to internet
+                    hideMoviesRv()
+                    showRetry()
+                }
+            }
+        }
+    }
+
+    private fun showRetryForNetworkIfRequired() {
+        val searchedMovie1 = searchedMovie
+        if (searchedMovie1 != null) {
+            if (searchedMovie1.movies.isNullOrEmpty()) {
+                // database doesn't have movies
+                // and we received network error
+                hideMoviesRv()
+                showRetry()
+            } else {
+                // database is showing cached movies
+                // we are unable to refresh
+                toast?.cancel()
+                toast = requireActivity().showToastAboveKeyboard(
+                    getString(R.string.not_connected_retry_later),
+                    Toast.LENGTH_SHORT
+                )
+            }
+        }
+        else{
+            // wait for database to push data to view
+        }
+    }
+
+    private fun showNotFoundIfRequired(data: SearchedMovie) {
+
+    }
+
+
+    private fun onGetMoviesResponseError(requestResult: RequestResult.Error<Any>) {
         Log.d(TAG, "onGetMoviesResponseError: $requestResult")
         val throwable = requestResult.throwable
         if (throwable is NetworkThrowable) {
@@ -137,20 +195,41 @@ class MoviesFragment : DaggerFragment() {
     }
 
     private var toast: Toast? = null
-    private fun onGetMoviesNetworkError(throwable: NetworkThrowable) {
-        toast?.cancel()
-        toast = requireActivity().showToastAboveKeyboard(
-            getString(R.string.not_connected_retry_later),
-            Toast.LENGTH_SHORT
-        )
+    private fun onGetMoviesNetworkError(networkThrowable: NetworkThrowable) {
+        this.networkThrowable = networkThrowable
+        showRetryForNetworkIfRequired()
     }
 
-    private fun onGetMoviesDataThrowable(throwable: DataThrowable) {
+    private fun hideMoviesRv() {
+        movies_rv.visibility = View.GONE
+    }
+
+    private fun showMoviesRv() {
+        movies_rv.visibility = View.VISIBLE
+    }
+
+    private fun showRetry() {
+        retry_cl.visibility = View.VISIBLE
+        retry_iv.playAnimation()
+        retry_iv.setOnClickListener {
+            retry_iv.playAnimation()
+        }
+        retry_btn.setOnClickListener {
+            getMoviesResponse(searchTerm)
+        }
+    }
+
+    private fun hideRetry() {
+        retry_cl.visibility = View.GONE
+    }
+
+    private fun onGetMoviesDataThrowable(dataThrowable: DataThrowable) {
         toast?.cancel()
-        val searchTerm = throwable.any
+        val searchTerm = dataThrowable.any
         val message = "${getString(R.string.nothing_found_for)} \"$searchTerm\""
-        toast=
+        toast =
             requireActivity().showToastAboveKeyboard(message, Toast.LENGTH_LONG)
+        this.dataThrowable = dataThrowable
     }
 
 
@@ -193,7 +272,9 @@ class MoviesFragment : DaggerFragment() {
             })
     }
 
+    private var searchTerm: String = "matrix"
     private fun getMoviesResponse(searchTerm: String) {
+        this.searchTerm = searchTerm
         viewModel.getMovies(searchTerm)
     }
 

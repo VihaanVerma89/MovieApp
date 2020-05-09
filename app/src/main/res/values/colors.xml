@@ -8,4 +8,5 @@
 
 
     <color name="shimmer_color">#57959595</color>
+    <color name="colorPrimary">#57E8E8E8</color>
 </resources>

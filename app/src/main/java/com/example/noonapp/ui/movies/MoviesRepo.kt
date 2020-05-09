@@ -40,6 +40,9 @@ class MoviesRepo @Inject constructor(
                 insertMovies(it)
                 it
             }
+            .doOnError {
+                println(it)
+            }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
@@ -69,9 +72,8 @@ class MoviesRepo @Inject constructor(
     override fun getMovies(searchTerm: String): Flowable<Any> {
         return Flowable.create({ emitter ->
             compositeDisposable.clear()
-            getAndInsertMoviesFromRemoteDataSource(emitter, searchTerm)
             getMoviesFromLocalDataSource(emitter, searchTerm)
-
+            getAndInsertMoviesFromRemoteDataSource(emitter, searchTerm)
         }, BackpressureStrategy.BUFFER)
 
     }
@@ -80,12 +82,19 @@ class MoviesRepo @Inject constructor(
         moviesLocalDataSource.insertMovies(searchedMovie)
     }
 
+//    fun getMoviesFromLocalDataSource(searchTerm: String): Flowable<List<SearchedMovie>> {
+//        return moviesLocalDataSource.getMovies(searchTerm)
+//    }
 
     override fun getMoviesFromLocalDataSource(
         emitter: FlowableEmitter<Any>,
         searchTerm: String
     ) {
         val subscribe = moviesLocalDataSource.getMovies(searchTerm)
+            .doOnNext {
+                println(it)
+            }
+//            .delay(5, TimeUnit.SECONDS)
             .subscribeOn(Schedulers.io())
             .subscribe(
                 {
