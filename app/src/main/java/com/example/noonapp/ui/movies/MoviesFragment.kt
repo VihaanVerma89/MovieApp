@@ -291,7 +291,7 @@ class MoviesFragment : DaggerFragment() {
             }, {
                 Log.d(TAG, "initSearchView onComplete")
 //                viewModel.getMovies("batman")
-                getMoviesResponse(searchTerm)
+//                getMoviesResponse(searchTerm)
                 initSearchView(searchView)
             })
     }

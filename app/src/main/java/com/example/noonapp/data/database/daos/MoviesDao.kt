@@ -31,4 +31,7 @@ interface MoviesDao {
 
     @Query("SELECT * FROM ${Tables.MOVIES}")
     fun getAllMovies(): Flowable<List<Movie>>
+
+    @Query("DELETE FROM ${Tables.MOVIES}")
+    fun deleteAll()
 }

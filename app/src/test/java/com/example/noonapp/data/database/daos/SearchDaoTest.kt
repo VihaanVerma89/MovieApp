@@ -10,6 +10,7 @@ import com.example.noonapp.data.database.AppDatabase
 import com.example.noonapp.data.models.SearchTerm
 import com.example.noonapp.data.models.SearchedMovie
 import io.reactivex.subscribers.TestSubscriber
+import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -90,9 +91,10 @@ class SearchDaoTest {
         insertSearchTerm(searchTerm)
         val moviesList = MovieTestUtils.getMoviesList(searchTerm)
         moviesDao.insertMovies(moviesList)
-        searchTermDao.getSearchedMovie(searchTerm).subscribe(movieTestSubscriber)
-        val searchedMovie = SearchedMovie(SearchTerm(searchTerm), moviesList)
-        movieTestSubscriber?.assertValue(searchedMovie)
+        val blockingFirst = searchTermDao.getSearchedMovie(searchTerm).blockingFirst()
+        val searchedMovieDb = blockingFirst[0]
+        val moviesListDb = searchedMovieDb.movies
+        assertEquals(moviesList, moviesListDb)
     }
 
 }

@@ -9,6 +9,7 @@ import com.example.noonapp.MovieTestUtils
 import com.example.noonapp.data.models.SearchTerm
 import com.example.noonapp.data.models.SearchedMovie
 import io.reactivex.subscribers.TestSubscriber
+import junit.framework.Assert.assertEquals
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -52,9 +53,8 @@ class MoviesLocalDataSourceTest {
 
         val searchedMovie = SearchedMovie(searchTermObj, moviesList)
         localDataSource.insertMovies(searchedMovie)
-        val searchedMovieDb = localDataSource.getMovies(searchTerm).subscribe(movieTestSubscriber)
-        val assertValue = movieTestSubscriber?.assertValue(searchedMovie)
-        println(assertValue)
+        val searchedMovieDb = localDataSource.getMovies(searchTerm).blockingFirst()
+        assertEquals(searchedMovie, searchedMovieDb)
     }
 
 

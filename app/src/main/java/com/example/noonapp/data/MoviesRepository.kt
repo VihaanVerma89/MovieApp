@@ -13,11 +13,10 @@ interface MoviesRepository {
         searchTerm: String
     )
 
+    fun getMoviesFromRemoteDataSource(searchTerm: String): Flowable<SearchedMovie>
     fun getAndInsertMoviesFromRemoteDataSource(
         emitter: FlowableEmitter<Any>,
         searchTerm: String
     )
-
     fun insertMovies(searchedMovie: SearchedMovie)
-    fun getMoviesFromRemoteDataSource(searchTerm: String): Flowable<SearchedMovie>
 }

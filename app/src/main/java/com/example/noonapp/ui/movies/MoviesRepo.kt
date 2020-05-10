@@ -82,10 +82,6 @@ class MoviesRepo @Inject constructor(
         moviesLocalDataSource.insertMovies(searchedMovie)
     }
 
-//    fun getMoviesFromLocalDataSource(searchTerm: String): Flowable<List<SearchedMovie>> {
-//        return moviesLocalDataSource.getMovies(searchTerm)
-//    }
-
     override fun getMoviesFromLocalDataSource(
         emitter: FlowableEmitter<Any>,
         searchTerm: String
